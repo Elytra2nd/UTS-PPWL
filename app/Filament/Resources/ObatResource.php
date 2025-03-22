@@ -13,6 +13,11 @@ use Filament\Tables\Table;
 class ObatResource extends Resource
 {
     protected static ?string $model = Obat::class;
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('admin');
+    }
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Manajemen Obat';
     protected static ?string $pluralLabel = 'Obat';
