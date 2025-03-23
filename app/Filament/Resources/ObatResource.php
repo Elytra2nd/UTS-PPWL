@@ -100,6 +100,10 @@ class ObatResource extends Resource
                         'Antibiotik' => 'Antibiotik',
                         'Analgesik' => 'Analgesik',
                         'Vitamin' => 'Vitamin',
+                        'Antihistamin' => 'Antihistamin',
+                        'Obat batuk' => 'Obat batuk',
+                        'Antasida' => 'Antasida',
+                        'Antijamur' => 'Antijamur',
                     ]),
             ])
             ->actions([
