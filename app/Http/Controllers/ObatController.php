@@ -16,4 +16,11 @@ class ObatController extends Controller
         $obat = Obat::where('nama', 'like', "%$query%")->get();
         return view('list', compact('obat'));
     }
+
+    public function show($id)
+    {
+        $obat = Obat::findOrFail($id);
+        return view('detail', compact('obat'));
+    }
+
 }
