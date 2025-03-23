@@ -10,6 +10,10 @@ use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Spatie\Permission\Models\Role;
+use Illuminate\Database\Eloquent\Model;
+
+
 class ObatResource extends Resource
 {
     protected static ?string $model = Obat::class;
@@ -18,6 +22,22 @@ class ObatResource extends Resource
     {
         return auth()->user()?->hasRole('admin');
     }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasRole('admin');
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()->hasRole('admin');
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()->hasRole('admin');
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Manajemen Obat';
     protected static ?string $pluralLabel = 'Obat';
