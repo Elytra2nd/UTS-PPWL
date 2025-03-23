@@ -23,6 +23,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Jeffgreco13\FilamentBreezy\FilamentBreezy;
 use FilamentBreezy\BreezyCore;
 use Jeffgreco13\FilamentBreezy\BreezyCore as FilamentBreezyBreezyCore;
+use App\Filament\Widgets\DashboardStatsWidget;
+
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -49,9 +51,8 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
-                TotalObatWidget::class,
-                TotalStokObatWidget::class,
                 ObatTerbanyakChart::class,
+                DashboardStatsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
