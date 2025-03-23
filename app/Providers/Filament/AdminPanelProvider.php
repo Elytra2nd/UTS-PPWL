@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\ObatTerbanyakChart;
 use App\Filament\Widgets\TotalObatWidget;
 use App\Filament\Widgets\TotalStokObatWidget;
 use Filament\Http\Middleware\Authenticate;
@@ -50,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\FilamentInfoWidget::class,
                 TotalObatWidget::class,
                 TotalStokObatWidget::class,
+                ObatTerbanyakChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,

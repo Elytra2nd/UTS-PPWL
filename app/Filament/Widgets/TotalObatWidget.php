@@ -3,11 +3,13 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Obat;
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
 
-class TotalObatWidget extends BaseWidget
+class TotalObatWidget extends StatsOverviewWidget
 {
+    protected static ?int $columns = 2; // 2 kolom
+
     protected function getCards(): array
     {
         return [
@@ -16,4 +18,5 @@ class TotalObatWidget extends BaseWidget
                 ->color('success'),
         ];
     }
+
 }
