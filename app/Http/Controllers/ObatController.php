@@ -1,26 +1,26 @@
 <?php
-// app/Http/Controllers/ObatController.php
+
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\Obat;
+
 class ObatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $obat = Obat::all();
-        return view('list', compact('obat'));
-    }
-    public function search(Request $request)
-    {
-        $query = $request->input('query');
-        $obat = Obat::where('nama', 'like', "%$query%")->get();
-        return view('list', compact('obat'));
+        $search = $request->input('search');
+
+        $obats = Obat::when($search, function ($query, $search) {
+            return $query->where('nama', 'like', "%{$search}%");
+        })->paginate(10);
+
+        return view('obat.index', compact('obats', 'search'));
     }
 
     public function show($id)
     {
         $obat = Obat::findOrFail($id);
-        return view('detail', compact('obat'));
+        return view('obat.show', compact('obat'));
     }
-
 }
