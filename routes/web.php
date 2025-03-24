@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ObatController;
-
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,5 +31,11 @@ Route::get('/', function () {
 
 Route::get('/obat', [ObatController::class, 'index'])->name('obat.index');
 Route::get('/obat/{id}', [ObatController::class, 'show'])->name('obat.show');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+});
 
 require __DIR__.'/auth.php';
