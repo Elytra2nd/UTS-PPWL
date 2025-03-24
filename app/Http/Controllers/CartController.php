@@ -26,8 +26,19 @@ class CartController extends Controller
         ]);
 
         $obat = Obat::findOrFail($request->obat_id);
+
+        // Cek apakah stok cukup
+        if ($obat->stok < $request->jumlah) {
+            return redirect()->route('cart.index')->with('error', 'Stok tidak mencukupi.');
+        }
+
+        // Hitung total harga
         $total_harga = $obat->harga * $request->jumlah;
 
+        // Kurangi stok obat
+        $obat->decrement('stok', $request->jumlah);
+
+        // Simpan ke keranjang
         Cart::create([
             'user_id' => Auth::id(),
             'obat_id' => $request->obat_id,
@@ -35,7 +46,12 @@ class CartController extends Controller
             'total_harga' => $total_harga,
         ]);
 
+        //dd($obat->stok);
+        //dd(session()->all());
+
+
         return redirect()->route('cart.index')->with('success', 'Obat berhasil ditambahkan ke keranjang.');
-    }
+
+        }
 
 }
