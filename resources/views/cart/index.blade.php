@@ -6,6 +6,7 @@
     <title>Keranjang Obat</title>
 </head>
 <body>
+
     <h2>Tambah Obat ke Keranjang</h2>
 
     @if(session('success'))
@@ -30,10 +31,46 @@
     </form>
 
     <h2>Isi Keranjang</h2>
-    <ul>
-        @foreach($carts as $cart)
-            <li>{{ $cart->obat->nama }} - {{ $cart->jumlah }} pcs - Rp {{ number_format($cart->total_harga, 0, ',', '.') }}</li>
-        @endforeach
-    </ul>
+
+    @if($carts->isEmpty())
+        <p>Keranjang kosong.</p>
+    @else
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nama Obat</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total Harga</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($carts as $cart)
+                <tr>
+                    <td>{{ $cart->obat->nama }}</td>
+                    <td>Rp {{ number_format($cart->obat->harga, 0, ',', '.') }}</td>
+                    <td>
+                        <form action="{{ route('cart.update', $cart->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="number" name="jumlah" value="{{ $cart->jumlah }}" min="1">
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+                    <td>Rp {{ number_format($cart->total_harga, 0, ',', '.') }}</td>
+                    <td>
+                        <form action="{{ route('cart.destroy', $cart->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+
 </body>
 </html>

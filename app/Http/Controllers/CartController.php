@@ -38,4 +38,27 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Obat berhasil ditambahkan ke keranjang.');
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'jumlah' => 'required|integer|min:1',
+        ]);
+
+        $cart = Cart::where('user_id', Auth::id())->findOrFail($id);
+        $cart->jumlah = $request->jumlah;
+        $cart->total_harga = $cart->obat->harga * $request->jumlah;
+        $cart->save();
+
+        return redirect()->route('cart.index')->with('success', 'Keranjang berhasil diperbarui.');
+    }
+
+    // Menghapus item dari keranjang
+    public function destroy($id)
+    {
+        $cart = Cart::where('user_id', Auth::id())->findOrFail($id);
+        $cart->delete();
+
+        return redirect()->route('cart.index')->with('success', 'Obat berhasil dihapus dari keranjang.');
+    }
+
 }
