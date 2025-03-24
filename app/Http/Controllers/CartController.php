@@ -13,7 +13,8 @@ class CartController extends Controller
     public function index()
     {
         $carts = Cart::where('user_id', Auth::id())->with('obat')->get();
-        return view('cart.index', compact('carts'));
+        $obats = Obat::all(); // Ambil semua data obat
+        return view('cart.index', compact('carts', 'obats'));
     }
 
     // Menambahkan item ke keranjang
