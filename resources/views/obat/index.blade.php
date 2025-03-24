@@ -1,48 +1,52 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Daftar Obat') }}
-        </h2>
+
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+    <div class="py-6 flex justify-center">
+        <div class="max-w-6xl w-full bg-yellow-500 text-yellow-900 shadow-lg rounded-lg p-6">
+            <h3 class="text-2xl font-bold text-yellow-900">Daftar Obat</h3>
 
-                <!-- Form Pencarian -->
-                <form method="GET" action="{{ route('obat.index') }}" class="mb-4">
-                    <input type="text" name="search" placeholder="Cari obat..." value="{{ request('search') }}"
-                        class="border-gray-300 focus:ring focus:ring-indigo-200 rounded-lg p-2 w-full">
-                </form>
+            <!-- Form Pencarian -->
+            <form method="GET" action="{{ route('obat.index') }}" class="mb-6">
+                <input type="text" name="search" placeholder="Cari obat..." value="{{ request('search') }}"
+                    class="bg-gray-800 text-white border-gray-600 focus:ring focus:ring-yellow-400 rounded-lg p-2 w-full">
+            </form>
 
-                <!-- Tabel Obat -->
-                <table border="1" class="w-full text-gray-900 dark:text-gray-100">
-                    <tr>
-                        <th class="py-2 px-4 border">Nama</th>
-                        <th class="py-2 px-4 border">Kategori</th>
-                        <th class="py-2 px-4 border">Stok</th>
-                        <th class="py-2 px-4 border">Harga</th>
-                        <th class="py-2 px-4 border">Aksi</th>
-                    </tr>
-                    @foreach ($obats as $o)
-                        <tr>
-                            <td class="py-2 px-4 border">{{ $o->nama }}</td>
-                            <td class="py-2 px-4 border">{{ $o->kategori }}</td>
-                            <td class="py-2 px-4 border">{{ $o->stok }}</td>
-                            <td class="py-2 px-4 border">Rp{{ number_format($o->harga, 2, ',', '.') }}</td>
-                            <td class="py-2 px-4 border">
-                                <a href="{{ route('obat.show', $o->id) }}" class="text-blue-500 hover:underline">Lihat
-                                    Detail</a>
-                            </td>
+            <!-- Tabel Obat -->
+            <div class="overflow-x-auto">
+                <table class="w-full bg-gray-800 rounded-lg text-white">
+                    <thead>
+                        <tr class="bg-gray-900 text-yellow-400 font-bold">
+                            <th class="py-3 px-4 text-center">Nama</th>
+                            <th class="py-3 px-4 text-center">Kategori</th>
+                            <th class="py-3 px-4 text-center">Stok</th>
+                            <th class="py-3 px-4 text-center">Harga</th>
+                            <th class="py-3 px-4 text-center">Aksi</th>
                         </tr>
-                    @endforeach
+                    </thead>
+                    <tbody>
+                        @foreach ($obats as $o)
+                            <tr class="border-b border-gray-900">
+                                <td class="py-3 px-4 text-center text-yellow-900">{{ $o->nama }}</td>
+                                <td class="py-3 px-4 text-center text-yellow-900">{{ $o->kategori }}</td>
+                                <td class="py-3 px-4 text-center text-yellow-900">{{ $o->stok }}</td>
+                                <td class="py-3 px-4 text-center text-yellow-900">Rp{{ number_format($o->harga, 2, ',', '.') }}</td>
+                                <td class="py-3 px-4 flex justify-center">
+                                    <a href="{{ route('obat.show', $o->id) }}"
+                                       class="text-red-500 font-semibold hover:text-red-600 transition">
+                                       Lihat Detail
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
                 </table>
+            </div>
 
-                <!-- Pagination -->
-                <div class="mt-4">
-                    {{ $obats->links() }}
-                </div>
-
+            <!-- Pagination -->
+            <div class="mt-6 flex justify-center">
+                {{ $obats->links() }}
             </div>
         </div>
     </div>
