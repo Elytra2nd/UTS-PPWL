@@ -9,15 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    // Menampilkan semua item dalam keranjang pengguna
     public function index()
     {
         $carts = Cart::where('user_id', Auth::id())->with('obat')->get();
-        $obats = Obat::all(); // Ambil semua data obat
+        $obats = Obat::all();
         return view('cart.index', compact('carts', 'obats'));
     }
 
-    // Menambahkan item ke keranjang
     public function store(Request $request)
     {
         $request->validate([
@@ -27,18 +25,13 @@ class CartController extends Controller
 
         $obat = Obat::findOrFail($request->obat_id);
 
-        // Cek apakah stok cukup
         if ($obat->stok < $request->jumlah) {
             return redirect()->route('cart.index')->with('error', 'Stok tidak mencukupi.');
         }
 
-        // Hitung total harga
         $total_harga = $obat->harga * $request->jumlah;
-
-        // Kurangi stok obat
         $obat->decrement('stok', $request->jumlah);
 
-        // Simpan ke keranjang
         Cart::create([
             'user_id' => Auth::id(),
             'obat_id' => $request->obat_id,
@@ -46,13 +39,8 @@ class CartController extends Controller
             'total_harga' => $total_harga,
         ]);
 
-        //dd($obat->stok);
-        //dd(session()->all());
-
-
         return redirect()->route('cart.index')->with('success', 'Obat berhasil ditambahkan ke keranjang.');
-
-        }
+    }
 
     public function update(Request $request, $id)
     {
@@ -61,6 +49,17 @@ class CartController extends Controller
         ]);
 
         $cart = Cart::where('user_id', Auth::id())->findOrFail($id);
+        $obat = $cart->obat;
+
+        $selisih = $request->jumlah - $cart->jumlah;
+
+        if ($selisih > 0 && $obat->stok < $selisih) {
+            return redirect()->route('cart.index')->with('error', 'Stok tidak mencukupi untuk perubahan jumlah.');
+        }
+
+        $obat->decrement('stok', max($selisih, 0));
+        $obat->increment('stok', max(-$selisih, 0));
+
         $cart->jumlah = $request->jumlah;
         $cart->total_harga = $cart->obat->harga * $request->jumlah;
         $cart->save();
@@ -68,13 +67,15 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Keranjang berhasil diperbarui.');
     }
 
-    // Menghapus item dari keranjang
     public function destroy($id)
     {
         $cart = Cart::where('user_id', Auth::id())->findOrFail($id);
+        $obat = $cart->obat;
+
+        $obat->increment('stok', $cart->jumlah);
+
         $cart->delete();
 
         return redirect()->route('cart.index')->with('success', 'Obat berhasil dihapus dari keranjang.');
     }
-
 }
