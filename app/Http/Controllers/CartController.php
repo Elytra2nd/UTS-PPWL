@@ -82,11 +82,18 @@ class CartController extends Controller
     public function checkout($id)
     {
         $cart = Cart::where('user_id', Auth::id())->findOrFail($id);
-        
+
         // Hapus item yang dicheckout dari keranjang
         $cart->delete();
 
         return redirect()->route('cart.index')->with('success', 'Checkout berhasil! Obat telah diproses.');
     }
+
+    public function destroyAll()
+    {
+        Cart::truncate(); // Hapus semua data di tabel carts
+        return redirect()->back()->with('success', 'Semua obat berhasil dihapus dari keranjang.');
+    }
+
 
 }
