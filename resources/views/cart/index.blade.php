@@ -8,12 +8,16 @@
 </head>
 <body class="bg-black text-white">
     <div class="min-h-screen flex flex-col items-center p-6">
+        
         <!-- Tambah Obat ke Keranjang -->
         <div class="w-full max-w-3xl bg-gray-900 p-6 rounded-lg shadow-lg">
             <h2 class="text-2xl font-semibold mb-4 text-yellow-400">Tambah Obat ke Keranjang</h2>
             
             @if(session('success'))
                 <p class="text-green-400">{{ session('success') }}</p>
+            @endif
+            @if(session('error'))
+                <p class="text-red-400">{{ session('error') }}</p>
             @endif
 
             <form action="{{ route('cart.store') }}" method="POST" class="space-y-4">
@@ -68,11 +72,22 @@
                                 </form>
                             </td>
                             <td class="p-2">Rp {{ number_format($cart->total_harga, 0, ',', '.') }}</td>
-                            <td class="p-2">
-                                <form action="{{ route('cart.destroy', $cart->id) }}" method="POST" class="inline">
+                            <td class="p-2 flex space-x-2">
+                                <!-- Tombol Checkout -->
+                                <form action="{{ route('cart.checkout', $cart->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin checkout obat ini?');">
+                                    @csrf
+                                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+                                        Checkout
+                                    </button>
+                                </form>
+
+                                <!-- Tombol Hapus -->
+                                <form action="{{ route('cart.destroy', $cart->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus obat ini dari keranjang?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Hapus</button>
+                                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                                        Hapus
+                                    </button>
                                 </form>
                             </td>
                         </tr>

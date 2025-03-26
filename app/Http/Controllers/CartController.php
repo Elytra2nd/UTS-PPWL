@@ -78,4 +78,15 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Obat berhasil dihapus dari keranjang.');
     }
+
+    public function checkout($id)
+    {
+        $cart = Cart::where('user_id', Auth::id())->findOrFail($id);
+        
+        // Hapus item yang dicheckout dari keranjang
+        $cart->delete();
+
+        return redirect()->route('cart.index')->with('success', 'Checkout berhasil! Obat telah diproses.');
+    }
+
 }
