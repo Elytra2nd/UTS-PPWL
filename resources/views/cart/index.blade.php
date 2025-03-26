@@ -8,16 +8,17 @@
 </head>
 <body class="bg-black text-white">
     <div class="min-h-screen flex flex-col items-center p-6">
-        
+
         <!-- Tambah Obat ke Keranjang -->
         <div class="w-full max-w-3xl bg-gray-900 p-6 rounded-lg shadow-lg">
             <h2 class="text-2xl font-semibold mb-4 text-yellow-400">Tambah Obat ke Keranjang</h2>
-            
+
+            <!-- Notifikasi Sukses -->
             @if(session('success'))
-                <p class="text-green-400">{{ session('success') }}</p>
+                <p class="text-green-400 bg-green-800 p-2 rounded">{{ session('success') }}</p>
             @endif
             @if(session('error'))
-                <p class="text-red-400">{{ session('error') }}</p>
+                <p class="text-red-400 bg-red-800 p-2 rounded">{{ session('error') }}</p>
             @endif
 
             <form action="{{ route('cart.store') }}" method="POST" class="space-y-4">
@@ -56,6 +57,16 @@
                             <th class="p-2">Jumlah</th>
                             <th class="p-2">Total Harga</th>
                             <th class="p-2">Aksi</th>
+
+                            <div class="flex justify-end mb-4">
+                                <!-- Tombol Hapus Semua -->
+                                <form action="{{ route('cart.destroyAll') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                                        Hapus Semua
+                                    </button>
+                                </form>
+                            </div>
                         </tr>
                     </thead>
                     <tbody>
